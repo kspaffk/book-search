@@ -10,28 +10,30 @@ export default function bookSearch() {
     axios
       .get(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
       .then(googBooks => {
-        setBooks({ books: googBooks.data.items });
-        console.log(googBooks.data.items, books);
+        setBooks(googBooks.data.items);
       });
   };
 
   const handleSearch = (event, query) => {
     event.preventDefault();
     if (query) {
-    searchBooks(query)
+    return searchBooks(query)
     }
   };
 
   const printBooks = () => {
-      if (books.books) {
+      if (books.length > 0) {
           return (
-        books.books.map(book => {
-            console.log(book)
+        books.map(book => {
               let bookInfo = book.volumeInfo
+              let bookImg = "img/noimgavail.jpg";
+              if (bookInfo.imageLinks) {
+                bookImg = bookInfo.imageLinks.smallThumbnail
+              }
               return (
-                  <div>
                       <Book 
-                        img={bookInfo.imageLinks.smallThumbnail}
+                        key={book.id}
+                        img={bookImg}
                         title={bookInfo.title}
                         description={bookInfo.description}
                         authors={bookInfo.authors}
@@ -39,13 +41,12 @@ export default function bookSearch() {
                         link={bookInfo.previewLink}
                         button="add"
                       />
-                  </div>
               )
           })
           )
       } else {
           return (
-          <div>Enter your search in the search box to look for books.</div>
+          <div key="none">Enter your search in the search box to look for books.</div>
           )
       }
   }
@@ -53,6 +54,7 @@ export default function bookSearch() {
   return (
     <div>
       <Search handleSearch={handleSearch} />
+      <hr></hr>
       <div className="container">
       <div className="row">
       {printBooks()}

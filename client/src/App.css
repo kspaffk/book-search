@@ -1,5 +1,14 @@
 .card {
   margin: 10px;
+  width: 90%;
+}
+
+.card-img {
+  width: 100%;
+}
+
+.card-body {
+  width: 100%;
 }
 
 .card-link {
