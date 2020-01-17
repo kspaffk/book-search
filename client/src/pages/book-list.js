@@ -1,23 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Book from "../components/book";
 import axios from "axios";
 
 export default function bookList() {
   const [books, setBooks] = useState([]);
-  let booksArray = [];
 
-  axios.get("/api/books").then(booksDB => {
-    booksDB.data.forEach(book => {
-      booksArray.push(book);
+  useEffect(() => {
+    axios.get("/api/books").then(booksDB => {
+      setBooks(booksDB.data);
+      console.log(books);
     });
-    setBooks(booksArray);
-  });
+  }, [books]);
 
   const renderBooks = () => {
     let bookCards = [];
     if (books.length > 0) {
+      bookCards.push(
       books.map(book => {
-        bookCards.push( 
+        return (
           <Book
             key={book._id}
             _id={book._id}
@@ -28,13 +28,21 @@ export default function bookList() {
             publishedDate={book.publishedDate}
             link={book.link}
             button="delete"
+            deleteBook={deleteBook}
           />
         );
-      });
+      }));
     } else {
-      bookCards.push(<div key="none">There are no saved books</div>)
+      bookCards.push(<div key="none">There are no saved books</div>);
     }
-    return bookCards
+    return bookCards;
+  };
+
+  const deleteBook = (bookId) => {
+    console.log(bookId)
+    axios.delete("api/books/" + bookId).then(res => {
+    console.log("BOOK DELETED")
+    })
   };
 
   return (

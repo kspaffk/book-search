@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 
 export default function Book(props) {
   let description = props.description;
@@ -7,28 +6,6 @@ export default function Book(props) {
   if (description !== "" && description !== undefined) {
     minDesc = description.substring(0, 400) + "...";
   }
-
-  const manageBook = e => {
-    console.log(e.target.value);
-    if (e.target.value === "add") {
-      const data = {
-        title: props.title,
-        authors: props.authors,
-        description: props.description,
-        image: props.img,
-        link: props.link,
-        publishedDate: props.publishedDate
-      };
-      axios.post("/api/books", data).then(res => {
-        console.log("BOOK ADDED");
-      });
-    } else {
-      console.log(props._id)
-      axios.delete("api/books/" + props._id).then(res => {
-        console.log("BOOK DELETED")
-      })
-    }
-  };
 
   return (
     <div className="card">
@@ -49,7 +26,7 @@ export default function Book(props) {
         <button
           className="btn btn-primary"
           value={props.button}
-          onClick={e => manageBook(e)}
+          onClick={props.button === "add" ? e => props.addBook(e, props.id) : () => props.deleteBook(props._id)}
         >
           {props.button === "add"
             ? "Add to Collection"
