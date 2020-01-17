@@ -11,8 +11,8 @@ function App() {
         <div>
           <Nav />
           <Switch>
-            <Route exact path="/" component={bookSearch} />
             <Route exact path="/list" component={bookList} />
+            <Route path="*" component={bookSearch} />
           </Switch>
         </div>
       </Router>

@@ -16,7 +16,8 @@ export default function Book(props) {
         authors: props.authors,
         description: props.description,
         image: props.img,
-        link: props.link
+        link: props.link,
+        publishedDate: props.publishedDate
       };
       axios.post("/api/books", data).then(res => {
         console.log("BOOK ADDED");
